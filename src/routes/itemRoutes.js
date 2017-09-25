@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var itemRouter = express.Router();
+var amqp = require('amqplib/callback_api')
 
 // Require Item model in our routes module
 var Item = require('../models/Item');
@@ -64,5 +65,45 @@ itemRouter.route('/delete/:id').get(function (req, res) {
 		else res.json('Successfully removed');
 	});
 });
+
+
+itemRouter.route('/send').post(function (req, res) {
+  amqp.connect('amqp://localhost', function(err, conn) {
+  conn.createChannel(function(err, ch) {
+  
+    var q = 'hello';
+    var msg = req.body.item;
+
+    ch.assertQueue(q, {durable: false});
+    // Note: on Node 6 Buffer.from(msg) should be used
+    ch.sendToQueue(q, new Buffer(msg));
+    console.log(" [x] Sent %s", msg);
+ // res.json([{"msg":msg}]);
+
+  });
+     // setTimeout(function() { conn.close(); process.exit(0) }, 500);
+});
+  });
+
+
+itemRouter.route('/receive').get(function (req, res) {
+
+console.log("yes received");
+  amqp.connect('amqp://localhost', function(err, conn) {
+    console.log("conne"+err);
+  conn.createChannel(function(error, ch) {
+    var q = 'hello';
+    ch.assertQueue(q, {durable: false});
+    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+    ch.consume(q, function(msg) {
+      console.log(" [x] Received %s", msg.content.toString());
+       conn.close();
+    res.json([{ item: msg.content.toString()}]);
+    }, {noAck: true});
+  });
+
+});
+});
+
 
 module.exports = itemRouter;
