@@ -66,7 +66,42 @@ itemRouter.route('/delete/:id').get(function (req, res) {
 	});
 });
 
+itemRouter.route('/send').post(function (req, res) {
+  amqp.connect('amqp://llnlwqmq:ia1lyVQx5_V4hq_mvkiCw65LADQ-7ZVJ@rhino.rmq.cloudamqp.com/llnlwqmq', function(err, conn) {
+  conn.createChannel(function(err, ch) {
+  
+    var q = 'hello';
+    var msg = req.body.item;
 
+    ch.assertQueue(q, {durable: false});
+    // Note: on Node 6 Buffer.from(msg) should be used
+    ch.sendToQueue(q, new Buffer(msg));
+    console.log(" [x] Sent %s", msg);
+ // res.json([{"msg":msg}]);
+
+  });
+     // setTimeout(function() { conn.close(); process.exit(0) }, 500);
+});
+  });
+
+
+itemRouter.route('/receive').get(function (req, res) {
+
+console.log("yes received");
+  amqp.connect('amqp://llnlwqmq:ia1lyVQx5_V4hq_mvkiCw65LADQ-7ZVJ@rhino.rmq.cloudamqp.com/llnlwqmq', function(err, conn) {
+    console.log("conne"+err);
+  conn.createChannel(function(error, ch) {
+    var q = 'hello';
+    ch.assertQueue(q, {durable: false});
+    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+    ch.consume(q, function(msg) {
+      console.log(" [x] Received %s", msg.content.toString());
+       conn.close();
+    res.json([{ item: msg.content.toString()}]);
+    }, {noAck: true});
+  });
+
+});
 
 });
 
