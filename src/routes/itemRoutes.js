@@ -67,7 +67,7 @@ itemRouter.route('/delete/:id').get(function (req, res) {
 });
 
 itemRouter.route('/send').post(function (req, res) {
-  amqp.connect('amqp://llnlwqmq:ia1lyVQx5_V4hq_mvkiCw65LADQ-7ZVJ@rhino.rmq.cloudamqp.com/llnlwqmq', function(err, conn) {
+  amqp.connect('amqp://nqobrvng:7eQPfTwXAT9jgU297vOLYuHPoyCZFDyQ@mosquito.rmq.cloudamqp.com/nqobrvng', function(err, conn) {
   conn.createChannel(function(err, ch) {
   
     var q = 'hello';
@@ -88,7 +88,7 @@ itemRouter.route('/send').post(function (req, res) {
 itemRouter.route('/receive').get(function (req, res) {
 
 console.log("yes received");
-  amqp.connect('amqp://llnlwqmq:ia1lyVQx5_V4hq_mvkiCw65LADQ-7ZVJ@rhino.rmq.cloudamqp.com/llnlwqmq', function(err, conn) {
+  amqp.connect('amqp://nqobrvng:7eQPfTwXAT9jgU297vOLYuHPoyCZFDyQ@mosquito.rmq.cloudamqp.com/nqobrvng', function(err, conn) {
     console.log("conne"+err);
   conn.createChannel(function(error, ch) {
     var q = 'hello';
