@@ -5,8 +5,6 @@ var amqp = require('amqplib/callback_api')
 
 // Require Item model in our routes module
 var Item = require('../models/Item');
-var http = require('http')
-http.globalAgent.maxSockets = Infinity;
 var message = "";
 var firstTime = "",
     msgNew = "",
