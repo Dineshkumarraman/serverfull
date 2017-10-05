@@ -81,7 +81,7 @@ itemRouter.route('/send').post(function(req, res) {
 
     if (firstTime == "") {
 
-        amqp.connect('amqp://localhost', function(err, conn) {
+        amqp.connect('amqp://llnlwqmq:ia1lyVQx5_V4hq_mvkiCw65LADQ-7ZVJ@rhino.rmq.cloudamqp.com/llnlwqmq', function(err, conn) {
             conn.createChannel(function(err, ch) {
                 var q = 'hello';
 
@@ -102,7 +102,7 @@ itemRouter.route('/send').post(function(req, res) {
 });
 itemRouter.route('/receive').get(function(req, res) {
     if (!receiveFlag) {
-        amqp.connect('amqp://localhost', function(err, conn) {
+        amqp.connect('amqp://llnlwqmq:ia1lyVQx5_V4hq_mvkiCw65LADQ-7ZVJ@rhino.rmq.cloudamqp.com/llnlwqmq', function(err, conn) {
             console.log("conne" + err);
             conn.createChannel(function(error, ch) {
                 var q = 'hello';
