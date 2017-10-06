@@ -3,7 +3,7 @@ var app = express();
 var itemRouter = express.Router();
 var amqp = require('amqplib/callback_api')
 
-// Require Item model in our routes module
+// Require Item model in our routes module.
 var Item = require('../models/Item');
 var message = "";
 var firstTime = "",
