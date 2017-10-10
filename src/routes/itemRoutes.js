@@ -30,7 +30,6 @@ itemRouter.route('/').get(function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            console.log(itms);
             res.json(itms);
         }
     });
@@ -72,6 +71,19 @@ itemRouter.route('/delete/:id').get(function(req, res) {
             if (err) res.json(err);
             else res.json('Successfully removed');
         });
+});
+
+// Defined edit route
+itemRouter.route('/isExisting/:name').get(function(req, res) {
+    var name = req.params.name;
+    Item.findOne({'item': name}, function(err,item) { 
+       if(item!=null){
+        return res.json(true)
+       }
+       else{
+        return res.json(false)
+       }
+         });
 });
 
 itemRouter.route('/send').post(function(req, res) {
