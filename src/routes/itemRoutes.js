@@ -12,6 +12,7 @@ var firstTime = "",
 
 // Defined store route
 itemRouter.route('/add/post').post(function(req, res) {
+    req.body.item=req.body.item.toLowerCase();
     var item = new Item(req.body);
     item.save()
         .then(item => {
@@ -50,8 +51,7 @@ itemRouter.route('/update/:id').post(function(req, res) {
             return next(new Error('Could not load Document'));
         else {
             // do your updates here
-            item.item = req.body.item;
-
+            item.item = req.body.item.toLowerCase();
             item.save().then(item => {
                     res.json('Update complete');
                 })
@@ -78,10 +78,11 @@ itemRouter.route('/isExisting/:name').get(function(req, res) {
     var name = req.params.name;
     Item.findOne({'item': name}, function(err,item) { 
        if(item!=null){
-        return res.json(true)
+        console.log(item)
+        return res.json({isExist:true,item:item.item})
        }
        else{
-        return res.json(false)
+        return res.json({isExist:false,item:''})
        }
          });
 });
